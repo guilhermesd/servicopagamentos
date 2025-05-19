@@ -9,19 +9,15 @@ namespace Tests.Unidade
         public void Construtor_Deve_Criar_Pagamento_Valido()
         {
             // Arrange
-            var idPagamento = Guid.NewGuid();
             var idPedido = Guid.NewGuid();
-            var txId = "123456789";
             var status = "Pago";
             var dataStatus = DateTime.UtcNow;
 
             // Act
-            var pagamento = new Pagamento(idPagamento, idPedido, txId, status, dataStatus);
+            var pagamento = new Pagamento(idPedido, status, dataStatus);
 
             // Assert
-            pagamento.IdPagamento.Should().Be(idPagamento);
             pagamento.IdPedido.Should().Be(idPedido);
-            pagamento.TxId.Should().Be(txId);
             pagamento.StatusPagamento.Should().Be(status);
             pagamento.DataStatusPagamento.Should().BeCloseTo(dataStatus, TimeSpan.FromSeconds(1));
         }
@@ -33,13 +29,11 @@ namespace Tests.Unidade
         public void Construtor_Deve_Lancar_Excecao_Para_Status_Invalido(string statusInvalido)
         {
             // Arrange
-            var idPagamento = Guid.NewGuid();
             var idPedido = Guid.NewGuid();
-            var txId = "123456789";
             var dataStatus = DateTime.UtcNow;
 
             // Act
-            Action acao = () => new Pagamento(idPagamento, idPedido, txId, statusInvalido, dataStatus);
+            Action acao = () => new Pagamento(idPedido, statusInvalido, dataStatus);
 
             // Assert
             acao.Should().Throw<ArgumentException>()
