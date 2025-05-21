@@ -5,16 +5,24 @@ namespace Domain.Entities
 {
     public class Pagamento
     {
-        public static readonly string[] STATUS = new string[] { "Aguardando", "Pago", "Cancelado" };
+        public const string STATUS_AGUARDANDO = "Aguardando";
+        public const string STATUS_PAGO = "Pago";
+        public const string STATUS_CANCELADO = "Cancelado";
 
-        public Pagamento(Guid idPagamento, Guid idPedido, string txId, string statusPagamento, DateTime dataStatusPagamento)
+        public static readonly string[] STATUS = new string[] { STATUS_AGUARDANDO, STATUS_PAGO, STATUS_CANCELADO };
+
+        public Pagamento(Guid idPedido, string statusPagamento, DateTime dataStatusPagamento)
         {
             if (!STATUS.Contains(statusPagamento))
                 throw new ArgumentException("O status está incorreto");
 
-            IdPagamento = idPagamento;
+            IdPagamento = Guid.NewGuid();
             IdPedido = idPedido;
-            TxId = txId;
+            AtualizarStatusPagamento(statusPagamento, dataStatusPagamento);
+        }
+
+        public void AtualizarStatusPagamento(string statusPagamento, DateTime dataStatusPagamento)
+        {
             StatusPagamento = statusPagamento;
             DataStatusPagamento = dataStatusPagamento;
         }
@@ -29,8 +37,6 @@ namespace Domain.Entities
 
         [BsonRepresentation(BsonType.String)]
         public Guid IdPedido { get; private set; }
-        
-        public string TxId { get; private set; }
 
         public string StatusPagamento { get; private set; }
 
